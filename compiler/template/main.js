@@ -32,20 +32,20 @@ function responseBuilder(t, f) {
         if (statusCode !== undefined) reply.status(statusCode);
         reply.type(t);
 
-        const componentRegex = /{{GET ([^\s.]+?)\s*}}/;
+        const componentRegex = /{{GET ([^\s]+?)\s*}}/;
         let foundComponent = content.match(componentRegex);
         while (foundComponent != null) {
             const path = foundComponent[1];
             const uuid = crypto.randomUUID();
             const componentLoaderScript = `
-            <div id="${uuid}"></div>
+            <div id=${JSON.stringify(uuid)}></div>
             <script>
-                fetch('${path}').then(function(response) {
+                fetch(${JSON.stringify(path)}).then(function(response) {
                     return response.text();
                 }).then(function(content) {
                     const div = document.createElement('div');
                     div.innerHTML = content.trim();
-                    document.getElementById('${uuid}').replaceWith(div.firstChild);
+                    document.getElementById(${JSON.stringify(uuid)}).replaceWith(div.firstChild);
                 })
             </script>
             `;
