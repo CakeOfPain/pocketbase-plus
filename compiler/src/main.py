@@ -4,7 +4,6 @@ import pathlib
 import json
 import re
 
-
 def main() -> None:
     # create folder "target/www" and copy public into it
     shutil.rmtree("target/main.js", ignore_errors=True)
@@ -43,7 +42,7 @@ class PocketbaseFunction(object):
         self.content = ""
 
         self.contentType = "text/html"
-        if suffix == ".json": self.contentType = "application/json"
+        if suffix == ".json" or suffix == ".js": self.contentType = "application/json"
 
     def html(self, html: str):
         self.content += f"echo({json.dumps(html)});\n"
@@ -73,24 +72,28 @@ class Compiler(object):
                 f = PocketbaseFunction(str(path).strip()[0:len(str(path))-len(path.suffix)], path.suffix)
                 content = file.read()
 
-                found = re.search(
-                    r"<script[\s\S]pocketbase>[\s\S]*?<\/script>", content
-                )
-                while found != None:
-                    # Parsing the html
-                    f.html(content[0 : found.start()])
-                    script = content[found.start() : found.end()]
-                    script = script[
-                        len("<script pocketbase>") : len(script) - len("</script>")
-                    ]
-                    f.script(script)
-
-                    content = content[found.end() : :]
-
+                # For js files, we don't need this parsing, because we use it directly with javascript
+                if path.suffix != ".js":
                     found = re.search(
-                        r"<script[\s\S]*?pocketbase>[\s\S]*?<\/script>", content
+                        r"<script[\s\S]pocketbase>[\s\S]*?<\/script>", content
                     )
-                f.html(content)
+                    while found != None:
+                        # Parsing the html
+                        f.html(content[0 : found.start()])
+                        script = content[found.start() : found.end()]
+                        script = script[
+                            len("<script pocketbase>") : len(script) - len("</script>")
+                        ]
+                        f.script(script)
+
+                        content = content[found.end() : :]
+
+                        found = re.search(
+                            r"<script[\s\S]*?pocketbase>[\s\S]*?<\/script>", content
+                        )
+                    f.html(content)
+                else:
+                    f.script(content)
                 self.functions.append(f)
         
         functions = map(lambda x: f"fastify.all('{x.path}', responseBuilder('{x.contentType}', async function (pb, echo, request, reply) {{ {x.content} }}));", self.functions)

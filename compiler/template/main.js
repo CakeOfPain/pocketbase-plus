@@ -2,6 +2,7 @@
 const Fastify = require("fastify")
 const PocketBase = require('pocketbase/cjs')
 const path = require('node:path')
+const crypto = require("node:crypto")
 
 const fastify = Fastify({
     logger: true

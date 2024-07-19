@@ -1,3 +1,0 @@
-{
-    "username": "<script pocketbase> echo('user.name'); </script>"
-}
