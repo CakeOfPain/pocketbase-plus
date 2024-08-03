@@ -40,8 +40,8 @@ class PocketbaseFunction(object):
         if self.path.endswith("index"): self.path = self.path[0:len(self.path)-len("index")]
         if self.path == "": self.path = "/"
         self.content = ""
-
         self.contentType = "text/html"
+        self.isMarkdown = 'true' if suffix == ".md" else 'false'
         if suffix == ".json" or suffix == ".js": self.contentType = "application/json"
 
     def html(self, html: str):
@@ -52,7 +52,7 @@ class PocketbaseFunction(object):
 
         found = re.search(regex_pattern, script)
         while found != None:
-            tags = found.group(1).replace("\\", "\\\\").replace("`", "\`")
+            tags = found.group(1).replace("\\", "\\\\").replace("`", "\\`")
             span = found.span(1)
             script = f"{script[:span[0]]}`{tags}`{script[span[1]:]}"
             found = re.search(regex_pattern, script)
@@ -96,7 +96,7 @@ class Compiler(object):
                     f.script(content)
                 self.functions.append(f)
         
-        functions = map(lambda x: f"fastify.all('{x.path}', responseBuilder('{x.contentType}', async function (pb, echo, request, reply) {{ {x.content} }}));", self.functions)
+        functions = map(lambda x: f"fastify.all('{x.path}', responseBuilder('{x.contentType}', async function (pb, echo, request, reply) {{ {x.content} }}, {x.isMarkdown}));", self.functions)
         code = "\n".join(functions)
         return code
 

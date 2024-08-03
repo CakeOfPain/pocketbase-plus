@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/public/markdown-style.css" rel="stylesheet">
+    <!-- Prism CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism.min.css" rel="stylesheet" />
+    <!-- Prism Line Numbers Plugin CSS (optional) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/line-numbers/prism-line-numbers.min.css"
+        rel="stylesheet" />
+    <!-- Prism Toolbar Plugin CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/toolbar/prism-toolbar.min.css"
+        rel="stylesheet" />
+    <title>{{#title}}</title>
+</head>
+
+<body>
+    <div class="app">
+        <div id="navigation" class="navigation">
+
+        </div>
+        <div id="markdown-content" class="content">
+            <div class="document-container">
+                {{#markdown}}
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+
+    <script src="/public/markdown-script.js">
+    </script>
+
+    <!-- Prism JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
+    <!-- Prism Autoloader Plugin -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <!-- Prism Toolbar Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/toolbar/prism-toolbar.min.js"></script>
+    <!-- Prism Copy-to-Clipboard Plugin -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+</body>
+
+</html>
